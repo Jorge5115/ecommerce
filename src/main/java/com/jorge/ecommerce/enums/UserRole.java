@@ -1,5 +1,4 @@
-package com.jorge.ecommerce.entity;
-
+package com.jorge.ecommerce.enums;
 
 public enum UserRole {
     CUSTOMER,
