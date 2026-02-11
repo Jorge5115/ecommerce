@@ -17,3 +17,13 @@ Plataforma de e-commerce completa con Spring Boot + React + PostgreSQL + Redis
 - [x] Relaciones configuradas
 - [x] JPA Auditing habilitado
 - [x] Repositories creados
+
+### Día 3: Checklist
+- [x] Dependencias JWT añadidas
+- [x] DTOs creados (LoginRequest, RegisterRequest, AuthResponse)
+- [x] JwtUtil creado
+- [x] CustomUserDetailsService implementado
+- [x] JwtAuthenticationFilter creado
+- [x] SecurityConfig configurado
+- [x] AuthService creado
+- [x] AuthController creado
