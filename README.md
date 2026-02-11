@@ -27,3 +27,16 @@ Plataforma de e-commerce completa con Spring Boot + React + PostgreSQL + Redis
 - [x] SecurityConfig configurado
 - [x] AuthService creado
 - [x] AuthController creado
+
+### Día 4: Database change
+
+- [x] Driver MySQL en pom.xml
+- [x] app.properties actualizado para MySQL
+- [x] docker-comp.yml actualizado ( Redis)
+- [x] Maven reload
+- [x] DTOs creados (ProductDTO, etc)
+- [x] Custom Exceptions creadas
+- [x] GlobalExceptionHandler implementado
+- [x] ProductService creado
+- [x] ProductController creado
+- [x] Method Security habilitado
