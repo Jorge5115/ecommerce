@@ -7,6 +7,8 @@ import com.jorge.ecommerce.exception.BadRequestException;
 import com.jorge.ecommerce.exception.ResourceNotFoundException;
 import com.jorge.ecommerce.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    @Cacheable(value = "categories")
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll()
@@ -26,6 +29,7 @@ public class CategoryService {
                 .toList();
     }
 
+    @Cacheable(value = "category", key = "#id")
     @Transactional(readOnly = true)
     public CategoryDTO getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
@@ -33,6 +37,7 @@ public class CategoryService {
         return convertToDTO(category);
     }
 
+    @CacheEvict(value = {"categories", "category"}, allEntries = true)
     @Transactional
     public CategoryDTO createCategory(CreateCategoryDTO createDTO) {
         if (categoryRepository.existsByName(createDTO.getName())) {
@@ -47,6 +52,7 @@ public class CategoryService {
         return convertToDTO(categoryRepository.save(category));
     }
 
+    @CacheEvict(value = {"categories", "category"}, allEntries = true)
     @Transactional
     public CategoryDTO updateCategory(Long id, CreateCategoryDTO updateDTO) {
         Category category = categoryRepository.findById(id)
@@ -59,6 +65,7 @@ public class CategoryService {
         return convertToDTO(categoryRepository.save(category));
     }
 
+    @CacheEvict(value = {"categories", "category"}, allEntries = true)
     @Transactional
     public void deleteCategory(Long id) {
         if (!categoryRepository.existsById(id)) {

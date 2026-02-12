@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.math.BigDecimal;
 
@@ -29,6 +31,8 @@ public class ProductService {
                 .map(this::convertToDTO);
     }
 
+
+    @Cacheable(value = "product", key = "#id")
     @Transactional(readOnly = true)
     public ProductDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
@@ -36,6 +40,7 @@ public class ProductService {
         return convertToDTO(product);
     }
 
+    @CacheEvict(value = {"product", "products"}, allEntries = true)
     @Transactional
     public ProductDTO createProduct(CreateProductDTO createDTO) {
         Category category = categoryRepository.findById(createDTO.getCategoryId())
@@ -53,6 +58,7 @@ public class ProductService {
         return convertToDTO(productRepository.save(product));
     }
 
+    @CacheEvict(value = {"product", "products"}, allEntries = true)
     @Transactional
     public ProductDTO updateProduct(Long id, UpdateProductDTO updateDTO) {
         Product product = productRepository.findById(id)
@@ -73,6 +79,7 @@ public class ProductService {
         return convertToDTO(productRepository.save(product));
     }
 
+    @CacheEvict(value = {"product", "products"}, allEntries = true)
     @Transactional
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
