@@ -105,3 +105,14 @@ Plataforma de e-commerce completa con Spring Boot + React + PostgreSQL + Redis
 - [x] Funcionalidad mover de wishlist a carrito
 - [x] Cambio de contraseña con verificación
 
+### Día 12: Sistema de Cupones
+
+- [x] DTOs creados (CouponDTO, CreateCouponDTO, ValidateCouponDTO)
+- [x] CouponRepository actualizado
+- [x] CouponService con lógica completa
+- [x] CouponController con endpoints REST
+- [x] Validación completa de cupones (fecha, límite, mínimo)
+- [x] Cupones por porcentaje y por cantidad fija
+- [x] Integrado con sistema de pedidos
+
+
