@@ -4,6 +4,8 @@ import com.jorge.ecommerce.dto.CreateOrderDTO;
 import com.jorge.ecommerce.dto.OrderDTO;
 import com.jorge.ecommerce.enums.OrderStatus;
 import com.jorge.ecommerce.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,10 +22,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
+@Tag(name = "Orders", description = "Endpoints de pedidos")
 public class OrderController {
 
     private final OrderService orderService;
 
+    @Operation(summary = "Crear pedido desde el carrito")
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -35,6 +39,7 @@ public class OrderController {
         );
     }
 
+    @Operation(summary = "Listar mis pedidos")
     @GetMapping
     public ResponseEntity<Page<OrderDTO>> getUserOrders(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -45,6 +50,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getUserOrders(userDetails.getUsername(), pageable));
     }
 
+    @Operation(summary = "Obtener pedido por ID")
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrderById(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -53,6 +59,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrderById(userDetails.getUsername(), id));
     }
 
+    @Operation(summary = "Cancelar pedido")
     @PutMapping("/{id}/cancel")
     public ResponseEntity<OrderDTO> cancelOrder(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -61,6 +68,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.cancelOrder(userDetails.getUsername(), id));
     }
 
+    @Operation(summary = "Listar todos los pedidos (Admin)")
     @GetMapping("/admin/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<OrderDTO>> getAllOrders(
@@ -71,6 +79,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrders(pageable));
     }
 
+    @Operation(summary = "Actualizar estado del pedido (Admin)")
     @PutMapping("/admin/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderDTO> updateOrderStatus(

@@ -3,6 +3,8 @@ package com.jorge.ecommerce.controller;
 import com.jorge.ecommerce.dto.CreateReviewDTO;
 import com.jorge.ecommerce.dto.ReviewDTO;
 import com.jorge.ecommerce.service.ReviewService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
+@Tag(name = "Reviews", description = "Endpoints de reseñas")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
+    @Operation(summary = "Crear reseña de producto")
     @PostMapping
     public ResponseEntity<ReviewDTO> createReview(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -33,6 +37,7 @@ public class ReviewController {
         );
     }
 
+    @Operation(summary = "Listar reseñas de un producto")
     @GetMapping("/product/{productId}")
     public ResponseEntity<Page<ReviewDTO>> getProductReviews(
             @PathVariable Long productId,
@@ -43,6 +48,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getProductReviews(productId, pageable));
     }
 
+    @Operation(summary = "Eliminar reseña")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReview(
             @AuthenticationPrincipal UserDetails userDetails,
