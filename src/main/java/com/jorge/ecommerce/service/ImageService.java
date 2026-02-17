@@ -20,13 +20,7 @@ public class ImageService {
                 file.getBytes(),
                 ObjectUtils.asMap(
                         "folder", "ecommerce/" + folder,
-                        "resource_type", "image",
-                        "transformation", ObjectUtils.asMap(
-                                "width", 800,
-                                "height", 600,
-                                "crop", "limit",
-                                "quality", "auto"
-                        )
+                        "resource_type", "image"
                 )
         );
         return (String) uploadResult.get("secure_url");
