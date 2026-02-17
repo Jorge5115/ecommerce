@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -20,16 +21,9 @@ public class ImageService {
                 file.getBytes(),
                 ObjectUtils.asMap(
                         "folder", "ecommerce/" + folder,
-                        "resource_type", "image",
-                        "moderation", "aws_rek"
+                        "resource_type", "image"
                 )
         );
-
-        String moderationStatus = (String) uploadResult.get("moderation_status");
-        if ("rejected".equals(moderationStatus)) {
-            throw new RuntimeException("Imagen rechazada por contenido inapropiado");
-        }
-
         return (String) uploadResult.get("secure_url");
     }
 
@@ -45,5 +39,20 @@ public class ImageService {
         String folder = parts[parts.length - 2];
         String subfolder = parts[parts.length - 3];
         return subfolder + "/" + folder + "/" + filename.split("\\.")[0];
+    }
+
+    public List<String> getGalleryImages(String folder) throws Exception {
+        Map result = cloudinary.api().resources(
+                ObjectUtils.asMap(
+                        "type", "upload",
+                        "prefix", "ecommerce/gallery/" + folder,
+                        "max_results", 50
+                )
+        );
+
+        List<Map> resources = (List<Map>) result.get("resources");
+        return resources.stream()
+                .map(r -> (String) r.get("secure_url"))
+                .collect(java.util.stream.Collectors.toList());
     }
 }
