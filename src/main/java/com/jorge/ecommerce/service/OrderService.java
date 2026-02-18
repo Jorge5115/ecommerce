@@ -102,6 +102,8 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
         cartService.clearCart(userEmail);
 
+
+
         notificationService.sendOrderNotification(userEmail, convertToDTO(savedOrder));
 
         return convertToDTO(savedOrder);
@@ -169,6 +171,11 @@ public class OrderService {
         return couponRepository.findByCode(couponCode)
                 .map(coupon -> {
                     if (!coupon.getActive()) return BigDecimal.ZERO;
+
+                    // Incrementar el contador de usos
+                    coupon.setUsedCount(coupon.getUsedCount() + 1);
+                    couponRepository.save(coupon);
+
                     if (coupon.getDiscountPercentage() != null) {
                         return subtotal.multiply(coupon.getDiscountPercentage()
                                 .divide(new BigDecimal("100")));
